@@ -34,6 +34,33 @@ struct xdpw_request *request_create(sd_bus *bus, const char *object_path) {
 	return req;
 }
 
+int send_portal_response(sd_bus_message *msg, ...) {
+	va_list response_args;
+	int ret = 0;
+
+	sd_bus_message *reply = NULL;
+	ret = sd_bus_message_new_method_return(msg, &reply);
+	if (ret < 0) {
+		return ret;
+	}
+
+	va_start(response_args, msg);
+	ret = sd_bus_message_appendv(reply, "ua{sv}", response_args);
+	va_end(response_args);
+
+	if (ret < 0) {
+		return ret;
+	}
+
+	ret = sd_bus_send(NULL, reply, NULL);
+	if (ret < 0) {
+		return ret;
+	}
+
+	sd_bus_message_unref(reply);
+	return 0;
+}
+
 void request_destroy(struct xdpw_request *req) {
 	if (req == NULL) {
 		return;

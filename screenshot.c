@@ -64,24 +64,7 @@ static int method_screenshot(sd_bus_message *msg, void *data,
 	char uri[strlen(path) + strlen(uri_prefix) + 1];
 	snprintf(uri, sizeof(uri), "%s%s", uri_prefix, path);
 
-	sd_bus_message *reply = NULL;
-	ret = sd_bus_message_new_method_return(msg, &reply);
-	if (ret < 0) {
-		return ret;
-	}
-
-	ret = sd_bus_message_append(reply, "ua{sv}", PORTAL_RESPONSE_SUCCESS, 1, "uri", "s", uri);
-	if (ret < 0) {
-		return ret;
-	}
-
-	ret = sd_bus_send(NULL, reply, NULL);
-	if (ret < 0) {
-		return ret;
-	}
-
-	sd_bus_message_unref(reply);
-	return 0;
+	return send_portal_response(msg, PORTAL_RESPONSE_SUCCESS, 1, "uri", "s", uri);
 }
 
 static const sd_bus_vtable screenshot_vtable[] = {
