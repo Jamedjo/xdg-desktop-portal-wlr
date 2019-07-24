@@ -1,5 +1,6 @@
 #ifndef XDPW_H
 #define XDPW_H
+#define TRACE printf ("%s:%d (%s)\n", __FILE__, __LINE__, __func__)
 
 #include <wayland-client.h>
 #include <systemd/sd-bus.h>
@@ -15,6 +16,7 @@ enum {
 };
 
 int init_screenshot(sd_bus *bus);
+int init_screencast(sd_bus *bus);
 
 struct xdpw_request *request_create(sd_bus *bus, const char *object_path);
 int send_portal_response(sd_bus_message *msg, ...);

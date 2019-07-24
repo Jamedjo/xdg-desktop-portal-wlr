@@ -27,6 +27,7 @@ executable(
 		'main.c',
 		'request.c',
 		'screenshot.c',
+		'screencast.c',
 	]),
 	dependencies: [
 		wayland_client,
